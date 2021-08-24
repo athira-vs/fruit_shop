@@ -1,5 +1,5 @@
 fruit_dict = {}
-cart = []
+cart = {}
 
 def main_menu():
     print("\n\n_______MENU_______")
@@ -7,9 +7,9 @@ def main_menu():
     print("2. Delete fruit")
     print("3. Search fruit")
     print("4. Change fruit details")
-    print("5. Add to cart")
-    print("6. Display fruits")
-    print("7. Display cart")
+    print("5. Display and buy")
+    print("6. Display cart")
+    print("7. Bill")
     print("8. Exit")
 
 
@@ -66,11 +66,6 @@ def search_fruit_by_rate():
     if not fruit_present:
         print(f"\n\tFruit with rate {rate} doesn't exist in database.")
     
-def display_cart():
-    for fruit in cart:
-        print("\n")
-        for key, value in fruit.items():
-            print("\t{}:\t{}".format(key,value))
 
 def display_fruit_details():
     for f_id, fruit in fruit_dict.items():
@@ -78,16 +73,6 @@ def display_fruit_details():
         for key, value in fruit.items():
             print("\t{}:\t{}".format(key,value))
 
-def add_to_cart():
-    #List the fruits
-    print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE")
-    for f_id, fruit in fruit_dict.items():
-        print("\t{}\t|\t{}\t|\t{}".format(f_id, fruit['name'], fruit['rate'] ))
-
-    f_id = input("Enter the fruit id to add the item to cart: ")
-    if f_id in fruit_dict.keys():
-        cart.append(fruit_dict[f_id])
-        #cart.append({"fr_id": f_id, "name" : fruit_dict[f_id]["name"], "rate" : fruit_dict[f_id]["rate"]})
 
 def change_fruit_menu():
     print("\t_____CHANGE FRUIT DETAILS_____")
@@ -98,6 +83,7 @@ def change_fruit_menu():
     print("\t5. Change import date")
     print("\t6. Change bought price")
 
+
 def change_fruit_id():
     f_id = input("\tEnter the fruit id to be changed: ")
     if f_id in fruit_dict.keys():
@@ -107,6 +93,7 @@ def change_fruit_id():
     else:
         print("\n\tInvalid fruit id")
 
+
 def change_fruit_name():
     f_id = input("\tEnter the fruit id: ")
     if f_id in fruit_dict.keys():
@@ -114,6 +101,7 @@ def change_fruit_name():
         fruit_dict[f_id]["name"] = new_name
     else:
         print("\n\tInvalid fruit id")
+
 
 def change_fruit_rate():
     f_id = input("\tEnter the fruit id: ")
@@ -123,6 +111,7 @@ def change_fruit_rate():
     else:
         print("\n\tInvalid fruit id")
 
+
 def change_imported_from():
     f_id = input("\tEnter the fruit id: ")
     if f_id in fruit_dict.keys():
@@ -130,6 +119,7 @@ def change_imported_from():
         fruit_dict[f_id]["imported_from"] = new_imp_frm
     else:
         print("\n\tInvalid fruit id")
+
 
 def change_import_date():
     f_id = input("\tEnter the fruit id: ")
@@ -139,6 +129,7 @@ def change_import_date():
     else:
         print("\n\tInvalid fruit id")
 
+
 def change_buy_price():
     f_id = input("\tEnter the fruit id: ")
     if f_id in fruit_dict.keys():
@@ -146,6 +137,90 @@ def change_buy_price():
         fruit_dict[f_id]["buy_price"] = new_price
     else:
         print("\n\tInvalid fruit id")
+
+
+def display_and_buy_menu():
+    print("\t1. Add fruits to cart")
+    print("\t2. Delete fruit from cart")
+    print("\t3. Display cart")
+    print("\t4. Bill")
+    print("\t5. Go to previous menu")
+
+
+def add_to_cart():
+    #List the fruits
+    print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE")
+    for f_id, fruit in fruit_dict.items():
+        print("\t{}\t|\t{}\t|\t{}".format(f_id, fruit['name'], fruit['rate'] ))
+
+    f_id = input("Enter the fruit id to add the item to cart: ")
+    if f_id in fruit_dict.keys():   # If fruit id exists
+        if f_id in cart.keys():     # Item already in cart
+            cart[f_id] += 1         # Increment the count of the fruit in cart 
+        else:
+            cart[f_id] = 1          # Add the fruit id to cart and initialise its count to 1
+
+
+def delete_from_cart():
+    display_cart()
+    f_id = input("\tEnter the fruit id to be deleted from cart: ")
+    if f_id in cart.keys():     # If the fruit id already exists in cart
+        if cart[f_id] == 1:
+            del cart[f_id]
+        else:                   # Cart contains more than 1 quantity of the fruit
+            cart[f_id] -= 1     # Decrement the count of the fruit
+    else:
+        print("\tInvalid fruit id. Doesn't exist in cart.")
+
+
+def display_cart():
+    for f_id in cart.keys():
+        print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE\t|\tQUANTITY")
+        print("\t{}\t|\t{}\t|\t{}\t|\t{}".format(f_id, fruit_dict[f_id]['name'], fruit_dict[f_id]['rate'], cart[f_id]))
+        
+
+def bill():
+    print("\t__________BILL__________")
+    #display_cart()
+    total = 0
+    for f_id in cart.keys():
+        print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE\t|\tQUANTITY\t|\tAMOUNT")
+        rate = fruit_dict[f_id]['rate']
+        count = cart[f_id]
+        amount = float(rate) * count
+        total += amount
+        print("\t{}\t|\t{}\t|\t{}\t|\t{}\t|\t{}".format(f_id, fruit_dict[f_id]['name'], rate, count, amount))
+    print('*'*50)
+    print("\tTOTAL AMOUNT:\t\t{}".format(total))
+
+
+def display_and_buy():
+    while True:
+        display_and_buy_menu()
+        ch = input("Enter your choice: ")
+        if ch == '1':
+            #Add fruits to cart
+            add_to_cart()
+
+        elif ch == '2':
+            #Delete fruits from cart
+            delete_from_cart()
+
+        elif ch == '3':
+            #Display cart
+            display_cart()
+
+        elif ch == '4':
+            #Bill
+            bill()
+
+        elif ch == '5':
+            #Exit
+            break
+        else:
+            print("Invalid Choice!!!")
+
+
 
 while True:
     main_menu()    
@@ -159,6 +234,7 @@ while True:
         delete_fruit() 
 
     elif ch == 3:
+        #Search fruit
         search_fruit_menu()
         choice = input("Enter your choice: ")
 
@@ -205,17 +281,17 @@ while True:
             print("\n\tInvalid choice")
 
     elif ch == 5:
-        #Add to cart
-        add_to_cart()
+        #Display and buy
+        display_and_buy()
 
     elif ch == 6:
-        #Display fruit details
-        display_fruit_details()
-
-    elif ch == 7:
-        #Display the cart
+        #Display cart
         display_cart()
 
+    elif ch == 7:
+        #Bill
+        bill()
+        
     elif ch == 8:
         #Exit
         break
