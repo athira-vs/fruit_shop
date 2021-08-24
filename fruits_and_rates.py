@@ -4,7 +4,7 @@ cart = {}
 def main_menu():
     print("\n\n_______MENU_______")
     print("1. Add fruit")
-    print("2. Delete fruit")
+    print("2. Delete fruit by name")
     print("3. Search fruit")
     print("4. Change fruit details")
     print("5. Display and buy")
@@ -36,6 +36,19 @@ def delete_fruit():
         del fruit_dict[f_id]
     else:
         print("\tInvalid fruit id. Can't delete")
+
+def delete_fruit_by_name():
+    name = input("Enter the fruit name to be deleted: ")
+    fruit_present = False
+    for f_id, fruit in fruit_dict.items():
+        if fruit["name"] == name:                   # Fruit with given name is present
+            del fruit_dict[f_id]                    # Delete fruit with the corresponding f_id
+            fruit_present = True
+            break
+    if not fruit_present:
+        print("\n\t" + name + " doesn't exist in database.")
+
+
 
 def search_fruit_menu():
     print("\t____SEARCH FRUIT____")
@@ -149,7 +162,7 @@ def display_and_buy_menu():
 
 def add_to_cart():
     #List the fruits
-    print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE")
+    print("\n\tFRUIT ID|FRUIT NAME|FRUIT RATE")
     for f_id, fruit in fruit_dict.items():
         print("\t{}\t|\t{}\t|\t{}".format(f_id, fruit['name'], fruit['rate'] ))
 
@@ -174,23 +187,23 @@ def delete_from_cart():
 
 
 def display_cart():
+    print("\n\tFRUIT ID|FRUIT NAME|FRUIT RATE|QUANTITY")
     for f_id in cart.keys():
-        print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE\t|\tQUANTITY")
         print("\t{}\t|\t{}\t|\t{}\t|\t{}".format(f_id, fruit_dict[f_id]['name'], fruit_dict[f_id]['rate'], cart[f_id]))
         
 
 def bill():
-    print("\t__________BILL__________")
+    print("\t"+"_"*15+"BILL"+"_"*15)
     #display_cart()
     total = 0
+    print("\n\tFRUIT ID|FRUIT NAME|FRUIT RATE|QUANTITY|AMOUNT")
     for f_id in cart.keys():
-        print("\n\tFRUIT ID\t|\tFRUIT NAME\t|\tFRUIT RATE\t|\tQUANTITY\t|\tAMOUNT")
         rate = fruit_dict[f_id]['rate']
         count = cart[f_id]
         amount = float(rate) * count
         total += amount
         print("\t{}\t|\t{}\t|\t{}\t|\t{}\t|\t{}".format(f_id, fruit_dict[f_id]['name'], rate, count, amount))
-    print('*'*50)
+    print("\t"+'*'*80)
     print("\tTOTAL AMOUNT:\t\t{}".format(total))
 
 
@@ -231,7 +244,7 @@ while True:
         
     elif ch == 2:
         #Delete Fruit
-        delete_fruit() 
+        delete_fruit_by_name() 
 
     elif ch == 3:
         #Search fruit
