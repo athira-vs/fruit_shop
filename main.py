@@ -30,7 +30,7 @@ while True:
     elif ch == 3:
         #Search fruit
         search_fruit_menu()
-        choice = input("Enter your choice: ")
+        choice = input("\n\tEnter your choice: ")
 
         if choice == '1':
             #Search Fruit (By name)
@@ -40,7 +40,7 @@ while True:
             #Search Fruit (By rate)
             search_fruit_by_rate()
         else:
-            print("Invalid Choice!!!")
+            print("\n\tInvalid Choice!!!")
 
     elif ch == 4:
         #Change fruit details
@@ -62,4 +62,4 @@ while True:
         #Exit
         break
     else:
-        print("\tInvalid Choice!!!")
+        print("\n\tInvalid Choice!!!")

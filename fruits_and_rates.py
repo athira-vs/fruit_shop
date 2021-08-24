@@ -1,48 +1,56 @@
 from var import *
 
 def add_fruit():
-    fr_id = input("\tEnter fruit id: ")
+    f_id = input("\tEnter fruit id: ")
     name = input("\tEnter fruit name: ")
     rate = input("\tEnter the rate: ")
     import_from = input("\tEnter the place it is imported from: ")
     import_date = input("\tEnter the import date: ")
     buy_price = input("\tEnter the bought price: ")
 
-    fruit_dict[fr_id]= {
-        "name" : name,
-        "rate" : rate,
-        "imported_from" : import_from,
-        "import_date" : import_date,
-        "buy_price" : buy_price
-        }
+    # Create a fruit object
+    fruit = Fruits(f_id, name, rate, import_from, import_date, buy_price)
 
+    # Add the new fruit object to the list
+    fruit_obj_lst.append(fruit)
+        
 
 def delete_fruit():
-    f_id = input("\tEnter the id of fruit to be deleted: ")
-    #if fruit in fruit_dict:
-    if f_id in fruit_dict.keys():
-        del fruit_dict[f_id]
+    f_id = input("\n\tEnter the id of fruit to be deleted: ")
+
+    # Filter out the fruit with corresponding f_id from fruit_obj_lst
+    fruit_lst = list(filter(lambda a: a.f_id == f_id,fruit_obj_lst))
+
+    #If a corresponding Fruits object is present in fruit_obj_lst
+    if fruit_lst:
+        fruit_obj_lst.remove(fruit_lst[0])  # Remove the corresponding Fruits object from the list
     else:
-        print("\tInvalid fruit id. Can't delete")
+        print("\n\t Fruit with f_id {} is not present.".format(f_id))
 
 
 def delete_fruit_by_name():
-    name = input("Enter the fruit name to be deleted: ")
-    fruit_present = False
-    for f_id, fruit in fruit_dict.items():
-        if fruit["name"] == name:                   # Fruit with given name is present
-            del fruit_dict[f_id]                    # Delete fruit with the corresponding f_id
-            fruit_present = True
-            break
-    if not fruit_present:
-        print("\n\t" + name + " doesn't exist in database.")
+    name = input("\n\tEnter the fruit name to be deleted: ")
+
+    # Filter out the fruit with corresponding name from fruit_obj_lst
+    fruit_lst = list(filter(lambda a: a.name == name,fruit_obj_lst))
+
+    #If a corresponding Fruits object is present in fruit_obj_lst
+    if fruit_lst:
+        fruit_obj_lst.remove(fruit_lst[0])  # Remove the corresponding Fruits object from the list
+    else:
+        print("\n\t Fruit with name {} is not present.".format(name))
 
 
-def display_fruit_details():
-    for f_id, fruit in fruit_dict.items():
-        print("\n\tFruit id:\t{}".format(f_id))
-        for key, value in fruit.items():
-            print("\t{}:\t{}".format(key,value))
+# Prints all the attributes of each of the Fruits object present in fruit_lst
+def display_fruit_details(fruit_lst):
+
+    # For each fruit object in fruit_lst
+    print("\n\tF_id | Name | Rate | Import From | Import Date | Buy Price")
+    for fruit in fruit_lst:
+        print("\t{} | {} | {} | {} | {} | {}".format(fruit.f_id, fruit.name, fruit.rate, fruit.import_from, fruit.import_date, fruit.buy_price)) 
+
+
+
 
 
 
